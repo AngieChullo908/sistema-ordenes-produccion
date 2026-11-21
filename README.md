@@ -1,68 +1,103 @@
 # Gestión de Órdenes de Producción
 
-Cliente de escritorio desarrollado para Gestión de Datos e Información de la Universidad Católica de Santa María. Implementa la funcionalidad de órdenes de producción del caso Panadería AVECESAR. Versión del aplicativo: 1.1.1.
+Aplicación de escritorio para gestionar órdenes de producción en una panadería. Desarrollada para el curso de Gestión de Datos e Información de la Universidad Católica de Santa María.
 
-## Qué permite hacer
+**Versión:** 1.1.1.
 
-Crear, buscar y consultar órdenes; modificar, cancelar o eliminar pendientes; iniciar una orden y registrar su cierre con cantidades producidas y pérdidas. También permite consultar recetas, existencias de insumos y diez reportes, y exportar resultados a CSV.
+## Funcionalidades
 
-Los catálogos se consultan desde la interfaz. El cierre suma el producto terminado al stock, pero no calcula ni descuenta automáticamente ingredientes.
+- Registro, búsqueda y consulta de órdenes de producción.
+- Modificación, cancelación y eliminación de órdenes pendientes.
+- Inicio de producción y registro del cierre con cantidades producidas, pérdidas y motivos de merma.
+- Consulta de recetas y existencias de insumos.
+- Diez reportes con consultas JOIN y exportación de resultados a CSV.
 
-## Herramientas
+El cierre incrementa el stock de productos terminados. El aplicativo no calcula ni descuenta automáticamente los ingredientes utilizados.
 
-Python 3.12, Tkinter y ttk, Psycopg 3.3.8 y PostgreSQL 14 o superior. No utiliza un framework de aplicación ni ORM.
+## Tecnologías
 
-## Preparar una base nueva
+Python 3.12, Tkinter y ttk, Psycopg 3.3.8 y PostgreSQL 14 o superior. La aplicación no utiliza frameworks ni ORM. El acceso a los datos se realiza mediante procedimientos almacenados; las validaciones y actualizaciones automáticas de la base se complementan con triggers.
 
-1. Instalar PostgreSQL y pgAdmin y conservar los datos de conexión.
-2. Sobre la base `postgres`, ejecutar `database/00_crear_base.sql` fuera de un bloque `BEGIN`.
-3. Abrir la herramienta de consultas sobre `avecesar_produccion` y ejecutar los archivos completos en este orden:
-   - `01_crear_tablas.sql`
-   - `02_insertar_datos.sql`, una sola vez
-   - `05_aplicativo.sql`
-   - `06_consultas_procedimientos.sql`
+## Instalación en Windows
 
-Los archivos 03 y 04 son consultas y verificaciones. El archivo 07 es opcional y está reservado para `avecesar_demo`; no debe ejecutarse sobre la base normal.
+Los archivos de distribución se descargan desde [Releases](https://github.com/AngieChullo908/sistema-ordenes-produccion/releases).
 
-La carga inicial contiene 275 registros. Este script corrige el dato de prueba de OP000001/P001 a 270 producidas y 0 perdidas, para que coincida con las 270 programadas. No vuelva a ejecutar la carga inicial sobre una base con información existente.
+1. Descargar y descomprimir `Gestion_Ordenes_Produccion_Windows.zip`.
+2. Ejecutar `Gestion_Ordenes_Produccion_Instalador.exe` y seguir el asistente.
+3. Preparar la base de datos según el apartado siguiente.
+4. Abrir el acceso directo **Gestión de Órdenes de Producción** del escritorio e ingresar los datos de conexión.
 
-## Ejecutar desde el código
+El instalador incluye Python, Tcl/Tk y el conector PostgreSQL. Requiere Windows 10 u 11 de 64 bits. PostgreSQL se instala y configura por separado, en el equipo local o en un servidor accesible.
 
-Con Python y Tkinter instalados, abrir una terminal en esta carpeta:
+## Preparación de la base de datos
 
-```console
+Para una base nueva, ejecutar los scripts desde pgAdmin en este orden:
+
+1. Sobre la base `postgres`, ejecutar `database/00_crear_base.sql` fuera de una transacción.
+2. Abrir la herramienta de consultas sobre `avecesar_produccion` y ejecutar:
+
+| Orden | Archivo | Contenido |
+| --- | --- | --- |
+| 1 | `01_crear_tablas.sql` | Tablas y restricciones |
+| 2 | `02_insertar_datos.sql` | Datos de prueba |
+| 3 | `05_aplicativo.sql` | Operaciones y reglas del aplicativo |
+| 4 | `06_consultas_procedimientos.sql` | Procedimientos de consulta y reportes |
+
+La carga inicial contiene 275 registros y se ejecuta una sola vez. Si la base ya contiene información de trabajo, la aplicación se conecta a ella sin repetir los scripts de creación ni la carga de prueba.
+
+Los archivos 03 y 04 contienen consultas y comprobaciones. El archivo 07 es una ampliación opcional exclusiva para la base `avecesar_demo`.
+
+En el paquete de Windows, los scripts se encuentran en `Scripts_SQL`; después de la instalación también están en la carpeta `database` del aplicativo.
+
+## Conexión a PostgreSQL
+
+La pantalla de acceso solicita servidor, puerto, base de datos, usuario, contraseña y modo SSL.
+
+| Campo | Valor habitual para una instalación local |
+| --- | --- |
+| Servidor | `localhost` |
+| Puerto | `5432` |
+| Base de datos | `avecesar_produccion` |
+| Usuario | Cuenta configurada en PostgreSQL |
+| Contraseña | Contraseña de esa cuenta de PostgreSQL |
+| SSL | `prefer`, salvo una configuración distinta del servidor |
+
+El aplicativo no incluye una contraseña predeterminada ni requiere una cuenta propia. La contraseña de PostgreSQL es independiente de la contraseña del dispositivo y de la contraseña maestra de pgAdmin.
+
+## Ejecución desde el código fuente
+
+Con Python 3.12 y Tkinter instalados, ejecutar desde la carpeta principal:
+
+```bash
 python -m pip install -r requirements.txt
 python main.py
 ```
 
-Al abrir el sistema, indicar servidor, puerto, base, usuario, contraseña y SSL. Para una instalación local habitual: `localhost`, `5432`, `avecesar_produccion` y `prefer`. El usuario y la contraseña son los de PostgreSQL en el equipo utilizado; no existe una contraseña predeterminada del aplicativo.
+En macOS o Linux, el comando puede llamarse `python3`. La base de datos debe estar preparada y disponible antes de conectarse.
 
-Para utilizar el instalador Windows entregado al docente no se necesita abrir el entorno de programación. El instalador y el manual se presentan por separado; PostgreSQL sigue siendo un requisito externo.
+## Estructura del proyecto
 
-## Organización del código
-
-- `main.py`: inicio del programa.
-- `app/views`: ventanas y formularios.
-- `app/controllers`: coordinación de las acciones.
-- `app/models`: reglas y validaciones.
-- `app/infrastructure`: configuración y acceso a PostgreSQL.
-- `database`: creación, datos de prueba, procedimientos, funciones y triggers.
-- `requirements.txt`: dependencia del conector.
-
-Las operaciones de negocio utilizan procedimientos almacenados. Los scripts incluyen 21 procedimientos, cuatro triggers y diez reportes con JOIN.
-
-## Entrega académica
-
-El informe, el manual de usuario, la memoria descriptiva y el instalador acompañan la entrega al docente. Los DNI y las cesiones de derechos se conservan en DOCUMENTOS y no se publican en este repositorio.
+| Ruta | Descripción |
+| --- | --- |
+| `main.py` | Inicio del aplicativo |
+| `app/views/` | Ventanas y formularios |
+| `app/controllers/` | Coordinación de las acciones de la interfaz |
+| `app/models/` | Reglas y validaciones |
+| `app/infrastructure/` | Configuración y acceso a PostgreSQL |
+| `database/` | Scripts de creación, datos y objetos de la base |
+| `packaging/` | Construcción del instalador de Windows |
+| `tests/` | Pruebas del modelo y de integración |
+| `docs/VALIDACION.md` | Resultados e instrucciones de verificación |
+| `verificar_entorno.py` | Diagnóstico del entorno incluido en Windows |
+| `VERIFICAR_WINDOWS.bat` | Ejecución del diagnóstico en Windows |
+| `requirements.txt` | Dependencia del conector |
 
 ## Verificación
 
-Se incluyen 35 pruebas en `tests` y el registro y las instrucciones para repetirlas en `docs/VALIDACION.md`. Se ejecutan en una base de ensayo; no utilice la base de trabajo para probar eliminaciones y cierres.
+El proyecto incluye 35 pruebas del modelo y de integración con PostgreSQL. Las instrucciones y los resultados están en [docs/VALIDACION.md](docs/VALIDACION.md). Las pruebas modifican datos y requieren una base de ensayo separada de la base de trabajo.
 
-## Instalador de Windows
+## Construcción del instalador
 
-El archivo `Gestion_Ordenes_Produccion_Instalador.exe` se entrega por separado y puede publicarse en Releases de GitHub. Incluye Python y las dependencias; PostgreSQL se prepara por separado. El ZIP del código fuente no incluye esos binarios.
+La construcción requiere Windows, Python 3.12 de 64 bits con Tcl/Tk y NSIS 3 con `makensis` disponible en PATH. Se realiza mediante `packaging/RECONSTRUIR_WINDOWS.bat`.
 
-Para reconstruirlo en Windows: instalar Python 3.12 de 64 bits con Tcl/Tk y NSIS 3 con `makensis` en PATH; ejecutar `packaging/RECONSTRUIR_WINDOWS.bat`. Los archivos de empaquetado están en `packaging`. Las licencias de las dependencias se conservan en el instalador.
-
-El formulario de cierre ajusta las columnas al ancho de la ventana y muestra la barra de desplazamiento cuando hay más filas de las que caben. El botón de confirmación permanece fuera del área desplazable. Esta corrección mantiene la funcionalidad y los scripts SQL de la versión 1.1.1.
+Las carpetas `runtime` y `vendor` y los archivos `.exe` se generan durante el empaquetado y no forman parte del código versionado. La distribución del instalador se realiza mediante Releases.
