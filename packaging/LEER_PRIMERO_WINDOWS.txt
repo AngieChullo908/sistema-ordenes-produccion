@@ -1,0 +1,21 @@
+GESTIÓN DE ÓRDENES DE PRODUCCIÓN — Windows x64
+Versión 1.1.1. Corrección de presentación del formulario de cierre.
+
+1. Extraiga todo el ZIP en una carpeta.
+2. Abra Gestion_Ordenes_Produccion_Instalador.exe y siga el asistente.
+3. Abra el acceso directo Gestión de Órdenes de Producción del escritorio.
+
+Incluye Python, Tcl/Tk y el conector PostgreSQL; no necesita instalar Python ni abrir un entorno de programación. Se requiere Windows 10 u 11 de 64 bits.
+PostgreSQL 14 o superior es un requisito externo: debe estar instalado y en ejecución en este equipo o en un servidor accesible. No se instala con este asistente.
+
+BASE NUEVA: desde pgAdmin, ejecute Scripts_SQL/00_crear_base.sql sobre postgres. Luego, sobre avecesar_produccion, ejecute en orden 01_crear_tablas.sql, 02_insertar_datos.sql, 05_aplicativo.sql y 06_consultas_procedimientos.sql. La carga inicial se ejecuta una sola vez. NO vuelva a crear tablas o insertar datos de prueba sobre una base con información de trabajo.
+Los scripts también se instalan en la subcarpeta database de la aplicación.
+Los archivos 03 y 04 son consultas y comprobaciones. 07 es opcional y exclusivo para avecesar_demo.
+
+CONEXIÓN: ingrese el servidor, puerto, base, usuario, contraseña y SSL de PostgreSQL. Para una instalación local habitual: localhost, 5432, avecesar_produccion, SSL prefer. No existe una contraseña predeterminada de la aplicación. La contraseña de PostgreSQL no es la contraseña de Windows ni la contraseña maestra de pgAdmin.
+
+Si ya tiene la base preparada, conéctese a ella sin volver a cargar los scripts.
+Utilice el nuevo acceso directo para abrir esta compilación. Una instalación anterior con otro nombre puede seguir presente.
+Si no abre, ejecute VERIFICAR_WINDOWS.bat en la carpeta instalada y conserve el mensaje para diagnóstico.
+
+Comprobaciones realizadas: 35 pruebas de modelo e integración, ajuste y desplazamiento del formulario de cierre y verificación del contenido del instalador. La instalación y ejecución nativas en otro equipo Windows deben comprobarse antes de presentar la entrega.
