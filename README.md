@@ -86,15 +86,9 @@ En macOS o Linux, el comando puede llamarse `python3`. La base de datos debe est
 | `app/infrastructure/` | Configuración y acceso a PostgreSQL |
 | `database/` | Scripts de creación, datos y objetos de la base |
 | `packaging/` | Construcción del instalador de Windows |
-| `tests/` | Pruebas del modelo y de integración |
-| `docs/VALIDACION.md` | Resultados e instrucciones de verificación |
 | `verificar_entorno.py` | Diagnóstico del entorno incluido en Windows |
 | `VERIFICAR_WINDOWS.bat` | Ejecución del diagnóstico en Windows |
 | `requirements.txt` | Dependencia del conector |
-
-## Verificación
-
-El proyecto incluye 35 pruebas del modelo y de integración con PostgreSQL. Las instrucciones y los resultados están en [docs/VALIDACION.md](docs/VALIDACION.md). Las pruebas modifican datos y requieren una base de ensayo separada de la base de trabajo.
 
 ## Construcción del instalador
 

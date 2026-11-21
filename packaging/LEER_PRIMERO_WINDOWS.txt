@@ -18,4 +18,3 @@ Si ya tiene la base preparada, conéctese a ella sin volver a cargar los scripts
 Utilice el nuevo acceso directo para abrir esta compilación. Una instalación anterior con otro nombre puede seguir presente.
 Si no abre, ejecute VERIFICAR_WINDOWS.bat en la carpeta instalada y conserve el mensaje para diagnóstico.
 
-Comprobaciones realizadas: 35 pruebas de modelo e integración, ajuste y desplazamiento del formulario de cierre y verificación del contenido del instalador. La instalación y ejecución nativas en otro equipo Windows deben comprobarse antes de presentar la entrega.
